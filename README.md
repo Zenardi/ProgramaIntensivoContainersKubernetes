@@ -2,6 +2,7 @@
 Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtuxx](https://github.com/badtuxx) e pela [linux TIPS](https://linuxtips.io)
 
 
+---
 
 ## Descomplicando Containers
 
@@ -54,3 +55,33 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 
 
 </details>
+
+
+<details>
+<summary class="summary">DAY-02</summary>
+
+- [Descomplicando Containers - DAY-02](DescomplicandoContainers/day-02/README.md#descomplicando-containers---day-02)
+- [Meu primeiro e tosco dockerfile...](DescomplicandoContainers/day-02/README.md#meu-primeiro-e-tosco-dockerfile)
+- [Criando e gerenciando imagens](DescomplicandoContainers/day-02/README.md#criando-e-gerenciando-imagens)
+  - [Agora eu quero criar minha imagem, posso?](DescomplicandoContainers/day-02/README.md#agora-eu-quero-criar-minha-imagem-posso)
+  - [Vamos começar do começo então, dockerfile!](DescomplicandoContainers/day-02/README.md#vamos-começar-do-começo-então-dockerfile)
+- [Multi-stage](DescomplicandoContainers/day-02/README.md#multi-stage)
+- [Entendendo volumes](DescomplicandoContainers/day-02/README.md#entendendo-volumes)
+  - [Introdução a volumes no Docker](DescomplicandoContainers/day-02/README.md#introdução-a-volumes-no-docker)
+  - [Criando volumes](DescomplicandoContainers/day-02/README.md#criando-volumes)
+  - [Localizando volumes](DescomplicandoContainers/day-02/README.md#localizando-volumes)
+  - [Criando e montando um data-only container](DescomplicandoContainers/day-02/README.md#criando-e-montando-um-data-only-container)
+  - [Sempre é bom um backup...](DescomplicandoContainers/day-02/README.md#sempre-é-bom-um-backup)
+- [Compartilhando as imagens](DescomplicandoContainers/day-02/README.md#compartilhando-as-imagens)
+  - [O que é o Docker Hub?](DescomplicandoContainers/day-02/README.md#o-que-é-o-docker-hub)
+  - [Vamos criar uma conta?](DescomplicandoContainers/day-02/README.md#vamos-criar-uma-conta)
+  - [Agora vamos compartilhar essas imagens na *interwebs*!](DescomplicandoContainers/day-02/README.md#agora-vamos-compartilhar-essas-imagens-na-interwebs)
+  - [Não confio na internet; posso criar o meu *registry* local?](DescomplicandoContainers/day-02/README.md#não-confio-na-internet-posso-criar-o-meu-registry-local)
+
+</details>
+
+
+
+
+
+---
