@@ -151,5 +151,21 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 
 </details>
 
+<details>
+<summary class="summary">DAY-04</summary>
+
+- [Descomplicando Containers - DAY-04](DescomplicandoContainers/day-04/README.md#descomplicando-containers---day-04)
+- [Introdução a volumes no Docker](DescomplicandoContainers/day-04/README.md#introdução-a-volumes-no-docker)
+- [Criando um volume tipo Bind](DescomplicandoContainers/day-04/README.md#criando-um-volume-tipo-bind)
+- [Criando volumes](DescomplicandoContainers/day-04/README.md#criando-volumes)
+  - [Localizando volumes](DescomplicandoContainers/day-04/README.md#localizando-volumes)
+- [Conhecendo outras formas de montar volumes e os Storage Drivers](DescomplicandoContainers/day-04/README.md#conhecendo-outras-formas-de-montar-volumes-e-os-storage-drivers)
+  - [Usando a flag -v ou --volume](DescomplicandoContainers/day-04/README.md#usando-a-flag--v-ou---volume)
+  - [Volumes do tipo tmpfs](DescomplicandoContainers/day-04/README.md#volumes-do-tipo-tmpfs)
+  - [Storage Drivers](DescomplicandoContainers/day-04/README.md#storage-drivers)
+    - [Qual driver estou usando?](DescomplicandoContainers/day-04/README.md#qual-driver-estou-usando)
+
+</details>
+
 
 ---
