@@ -1,0 +1,82 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: descomplicandok8s
+  region: us-east-2
+  version: "1.35"
+
+iam:
+  withOIDC: true
+  podIdentityAssociations: []
+
+managedNodeGroups:
+  - name: ng-descomplicandok8s
+    instanceTypes: ["t3a.medium", "t3.medium"]
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 1
+
+    # --- OTIMIZAÇÃO DE DISCO ---
+    volumeSize: 20
+    volumeType: gp3       # <--- MAIS BARATO: gp3 custa $0.08/GB vs $0.10/GB do gp2
+    volumeIOPS: 3000      # Grátis no gp3 (incluso no preço base)
+    volumeThroughput: 125 # Grátis no gp3 (incluso no preço base)
+    
+    spot: true                # Usa instâncias SPOT para economizar ~70%
+    amiFamily: Bottlerocket
+    
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        autoScaler: true
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+    tags:
+      NodeType: spot
+      env: descomplicandok8s
+      ami-family: bottlerocket
+
+
+  # Nodegroup opcional: On-Demand para workloads críticas
+  # - name: on-demand-standard
+  #   instanceType: t3.medium
+  #   desiredCapacity: 1
+  #   minSize: 1
+  #   maxSize: 3
+  #   taints:
+  #     - key: dedicated
+  #       value: "true"
+  #       effect: NoSchedule
+  #   tags:
+  #     NodeType: on-demand
+  #   labels:
+  #     workload: critical
+
+addons:
+  # 1. VPC-CNI com Pod Identity
+  - name: vpc-cni
+    version: latest
+    podIdentityAssociations:
+      - namespace: kube-system
+        serviceAccountName: aws-node
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
+  # 2. EBS CSI Driver com Pod Identity
+  - name: aws-ebs-csi-driver
+    version: latest
+    podIdentityAssociations:
+      - namespace: kube-system
+        serviceAccountName: ebs-csi-controller-sa
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+
+  # 3. Addon essencial para o Pod Identity funcionar
+  - name: eks-pod-identity-agent
+    version: latest
+
+  - name: coredns
+    version: latest
+  - name: kube-proxy
+    version: latest

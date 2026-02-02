@@ -1,0 +1,92 @@
+2026-01-31 13:18:36 [✖]  could not select subnets from subnet IDs (allSubnets=v1alpha5.AZSubnetMapping{"us-east-2a":v1alpha5.AZSubnetSpec{ID:"subnet-09fad374b6523f927", AZ:"us-east-2a", CIDR:(*ipnet.IPNet)(0xc0004553e0), CIDRIndex:0, OutpostARN:""}, "us-east-2b":v1alpha5.AZSubnetSpec{ID:"subnet-0d74a8c675960e019", AZ:"us-east-2b", CIDR:(*ipnet.IPNet)(0xc0004552c0), CIDRIndex:0, OutpostARN:""}, "us-east-2c":v1alpha5.AZSubnetSpec{ID:"subnet-04892ed8fd0235234", AZ:"us-east-2c", CIDR:(*ipnet.IPNet)(0xc000455740), CIDRIndex:0, OutpostARN:""}} localZones=[]string(nil) subnets=[]string{"public"}): operation error EC2: DescribeSubnets, https response error StatusCode: 400, RequestID: 238ea448-e32d-4b5f-a752-7ed03a0f524d, api error InvalidSubnetID.NotFound: The subnet ID 'public' does not exist
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: descomplicandok8s
+  region: us-east-2  # Ou sa-east-1 (SP), mas SP é mais caro
+  version: "1.35"    # Use a versão que preferir
+
+iam:
+  withOIDC: true
+  podIdentityAssociations: []
+
+vpc:
+  cidr: "192.168.0.0/16"
+  # -------------------------------------------------------------------------
+  # O 'privateAccess: true' garante que os nós consigam falar com o Control Plane
+  # através da rede interna da VPC, sem depender de "hairpinning" via internet,
+  # o que resolve o risco de falha de comunicação citado na documentação.
+  # -------------------------------------------------------------------------
+  clusterEndpoints:
+    publicAccess: true  # Acesso à API do cluster via internet
+    privateAccess: true # Necessário para o node falar com a API
+  nat:
+    gateway: Disable  # Desabilita o NAT Gateway
+
+
+managedNodeGroups:
+  - name: ng-descomplicandok8s
+    instanceTypes: ["t3a.medium", "t3.medium"]
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 1
+
+  # -------------------------------------------------------------------------
+    # CONFIGURAÇÃO DE REDE DO NÓ:
+    # Ao especificar 'public', o eksctl configura o Launch Template para associar
+    # IPs públicos aos nós. Isso é obrigatório pois NÃO TEMOS NAT.
+    # Sem IP público aqui, o nó não consegue baixar imagens.
+    # -------------------------------------------------------------------------
+    subnets:
+      - public
+
+    # --- OTIMIZAÇÃO DE DISCO ---
+    volumeSize: 20
+    volumeType: gp3       # gp3 custa $0.08/GB vs $0.10/GB do gp2
+    volumeIOPS: 3000
+    volumeThroughput: 125
+    
+    spot: true                # Usa instâncias SPOT para economizar ~70%
+    privateNetworking: false  # Garante que os nós tenham IP público
+    amiFamily: Bottlerocket
+    
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        autoScaler: true
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+    tags:
+      NodeType: spot
+      env: descomplicandok8s
+      ami-family: bottlerocket
+
+addons:
+  # 1. VPC-CNI com Pod Identity
+  - name: vpc-cni
+    version: latest
+    podIdentityAssociations:
+      - namespace: kube-system
+        serviceAccountName: aws-node
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
+  # 2. EBS CSI Driver com Pod Identity
+  - name: aws-ebs-csi-driver
+    version: latest
+    podIdentityAssociations:
+      - namespace: kube-system
+        serviceAccountName: ebs-csi-controller-sa
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+
+  # 3. Addon essencial para o Pod Identity funcionar
+  - name: eks-pod-identity-agent
+    version: latest
+
+  - name: coredns
+    version: latest
+  - name: kube-proxy
+    version: latest
