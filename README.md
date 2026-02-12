@@ -208,7 +208,7 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 
 
 <details>
-<summary class="summary">DAY-06 - Orquetrando nossos Containers com Docker Compose e Docker Swarm</summary>
+<summary class="summary">DAY-06 - Orquestrando nossos Containers com Docker Compose e Docker Swarm</summary>
 
 - [Descomplicando Containers - DAY-06](DescomplicandoContainers/day-06/README.md#descomplicando-containers---day-06)
 - [Docker Swarm](DescomplicandoContainers/day-06/README.md#docker-swarm)
