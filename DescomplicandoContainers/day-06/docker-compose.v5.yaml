@@ -1,0 +1,53 @@
+services:
+  giropops-senhas:
+    image: zenardi/giropops-senhas:4.0
+    ports:
+      - "5000:5000"
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - strigus:/strigus
+    networks:
+      - giropops
+    depends_on:
+      - redis
+    # A imagem 4.0 de giropops-senhas usa a imagem base da chainguard (distroless, cgr.dev/chainguard/python:latest), 
+    # que não tem o curl instalado, por isso o healthcheck está comentado. Teria que alterar a versao 1.0, 2.0 ou 3.0 
+    # para usar o curl no healthcheck.
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5000"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 2s
+
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--appendonly", "yes"]
+    deploy:
+      replicas: 3
+    # ports:
+    #   - "6379:6379"
+    networks:
+      - giropops
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 2s
+
+volumes:
+  strigus:
+
+networks:
+  giropops:
+    driver: bridge

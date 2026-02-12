@@ -11,6 +11,16 @@
   - [Acessando a *secret*](#acessando-a-secret)
   - [Atualizando a *secret* de um serviço](#atualizando-a-secret-de-um-serviço)
 - [Docker Compose](#docker-compose)
+  - [Arquivos do day-06](#arquivos-do-day-06)
+  - [Como executar os exemplos](#como-executar-os-exemplos)
+  - [Notas importantes](#notas-importantes)
+  - [Detalhamento dos arquivos docker-compose](#detalhamento-dos-arquivos-docker-compose)
+    - [docker-compose.v1.yaml](#docker-composev1yaml)
+    - [docker-compose.v2.yaml](#docker-composev2yaml)
+    - [docker-compose.v3.yaml](#docker-composev3yaml)
+    - [docker-compose.v4.yaml](#docker-composev4yaml)
+    - [docker-compose.v5.yaml](#docker-composev5yaml)
+    - [docker-compose.v6.yaml](#docker-composev6yaml)
   - [O comando *docker stack*](#o-comando-docker-stack)
   - [E já acabou? :(](#e-já-acabou-)
 
@@ -882,6 +892,167 @@ debaixo daquele *service*, volumes, *network*, *secrets*, etc.).
 O padrão que os *compose files* seguem é o YML, supersimples e de fácil
 entendimento, porém sempre é bom ficar ligado na sintaxe que o padrão
 YML lhe impõe. ;)
+
+## Arquivos do day-06
+
+Neste day deixamos varias versoes de um mesmo compose para voce comparar
+e entender a evolucao dos recursos. Cada arquivo adiciona novos conceitos
+em cima do anterior:
+
+- [docker-compose.v1.yaml](docker-compose.v1.yaml) -- app + redis, rede
+    dedicada e variavel `REDIS_HOST`.
+- [docker-compose.v2.yaml](docker-compose.v2.yaml) -- adiciona volume
+    nomeado para persistencia da app.
+- [docker-compose.v3.yaml](docker-compose.v3.yaml) -- introduz `deploy`
+    com replicas no redis (pensando em swarm).
+- [docker-compose.v4.yaml](docker-compose.v4.yaml) -- inclui limites e
+    reservas de recursos, e `depends_on`.
+- [docker-compose.v5.yaml](docker-compose.v5.yaml) -- adiciona
+    healthcheck no redis e explica o motivo de o healthcheck da app estar
+    comentado.
+- [docker-compose.v6.yaml](docker-compose.v6.yaml) -- build local da app,
+    labels, update policy, restart policy, DNS e volume bindado.
+
+## Como executar os exemplos
+
+Para rodar localmente com Docker Compose:
+
+```bash
+docker compose -f docker-compose.v1.yaml up -d
+```
+
+Para derrubar:
+
+```bash
+docker compose -f docker-compose.v1.yaml down
+```
+
+Se quiser usar swarm, substitua por `docker stack` e escolha um nome de
+stack:
+
+```bash
+docker stack deploy -c docker-compose.v4.yaml giropops
+```
+
+No caso da versao com build local, lembre-se de iniciar no diretorio
+day-06 e garantir que o Dockerfile esteja acessivel:
+
+```bash
+docker compose -f docker-compose.v6.yaml up -d --build
+```
+
+## Notas importantes
+
+- Campos dentro de `deploy` sao ignorados pelo `docker compose` (modo
+    local) e so fazem efeito no swarm.
+- A versao v6 usa bind mount com `${PWD}/strigus`. Crie a pasta antes:
+
+```bash
+mkdir -p ./strigus
+```
+
+- A app referencia o Redis pelo hostname `redis`, que e o nome do
+    servico na rede `giropops`.
+- O healthcheck da app esta comentado porque a imagem 4.0 usa base
+    distroless sem `curl`. Use a imagem 1.0, 2.0 ou 3.0 se quiser o
+    healthcheck ativo.
+
+## Detalhamento dos arquivos docker-compose
+
+Abaixo esta uma explicacao detalhada de cada arquivo, em ordem de
+complexidade. Para referencia rapida, veja os arquivos:
+
+- [docker-compose.v1.yaml](docker-compose.v1.yaml)
+- [docker-compose.v2.yaml](docker-compose.v2.yaml)
+- [docker-compose.v3.yaml](docker-compose.v3.yaml)
+- [docker-compose.v4.yaml](docker-compose.v4.yaml)
+- [docker-compose.v5.yaml](docker-compose.v5.yaml)
+- [docker-compose.v6.yaml](docker-compose.v6.yaml)
+
+### docker-compose.v1.yaml
+
+Este e o compose base com dois servicos e uma rede dedicada.
+
+- `services`: inicio da definicao dos servicos.
+- `giropops-senhas`: nome do servico da aplicacao.
+- `image: zenardi/giropops-senhas:4.0`: imagem que sera usada para a app.
+- `ports`:
+    - `"5000:5000"`: publica a porta 5000 do container na 5000 do host.
+- `environment`:
+    - `REDIS_HOST=redis`: a app resolve o Redis pelo nome do servico.
+- `networks`:
+    - `giropops`: conecta a app na rede dedicada.
+- `redis`: nome do servico do banco em memoria.
+- `image: redis:latest`: imagem oficial do Redis.
+- `ports`:
+    - `"6379:6379"`: publica a porta do Redis no host (util para testes).
+- `networks`: conecta o Redis na mesma rede da app.
+- `networks`: bloco de definicao de redes.
+- `giropops`:
+    - `driver: bridge`: cria rede local do tipo bridge.
+
+### docker-compose.v2.yaml
+
+Mantem tudo do v1 e adiciona persistencia com volume nomeado.
+
+- `volumes` em `giropops-senhas`:
+    - `strigus:/strigus`: monta um volume persistente na pasta da app.
+- `volumes` (nivel raiz): declara o volume nomeado `strigus`.
+
+### docker-compose.v3.yaml
+
+Introduz configuracao de swarm no Redis.
+
+- `deploy` em `redis`:
+    - `replicas: 3`: cria 3 replicas do Redis quando executado via swarm.
+- `ports` do Redis esta comentado: evita expor todas as replicas no host.
+    Em swarm, normalmente acessamos o Redis pelo service name.
+
+### docker-compose.v4.yaml
+
+Adiciona limites de recursos e dependencia entre servicos.
+
+- `deploy.resources` em `giropops-senhas`:
+    - `reservations`: reserva minima de CPU e memoria.
+    - `limits`: teto maximo de CPU e memoria.
+- `depends_on`:
+    - `redis`: indica que a app depende do Redis para subir.
+
+### docker-compose.v5.yaml
+
+Entra em observabilidade e durabilidade.
+
+- `redis.command`: inicia o Redis com `--appendonly yes` para persistir.
+- `redis.healthcheck`: valida o Redis com `redis-cli ping`.
+    - `interval`, `timeout`, `retries`, `start_period`: parametros do check.
+- `giropops-senhas.healthcheck` esta comentado:
+    a imagem 4.0 e distroless e nao possui `curl`.
+
+### docker-compose.v6.yaml
+
+Versao mais completa, com build local, politicas e labels.
+
+- `build` em `giropops-senhas`:
+    - `context`: aponta para o codigo da app.
+    - `dockerfile: Dockerfile.v4`: define o Dockerfile a usar.
+- `ports`: continua expondo a porta 5000.
+- `deploy.labels`: adiciona metadados para auditoria e organizacao.
+- `deploy.update_config`: controla rollout (1 por vez, delay de 5s).
+- `deploy.restart_policy`: reinicia em falha com backoff e limite.
+- `environment`: aponta o Redis pelo service name.
+- `volumes`:
+    - `strigus:/strigus`: monta volume para persistencia.
+- `networks`: conecta no bridge `giropops`.
+- `depends_on`: registra dependencia da app no Redis.
+- `dns`: define DNS customizado dentro do container.
+- `redis.command`: habilita AOF (`--appendonly yes`).
+- `redis.healthcheck`: valida o Redis com `redis-cli ping`.
+- `labels` em `redis`: identifica host e projeto.
+- `volumes.strigus`:
+    - `driver: local`: usa driver local.
+    - `driver_opts`: faz bind do host para `${PWD}/strigus`.
+    - `labels`: aplica metadados ao volume.
+- `networks.giropops.driver: bridge`: rede local dedicada.
 
 Bem, vamos parar de falar e começar a brincadeira!
 

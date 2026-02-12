@@ -2,6 +2,12 @@
 Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtuxx](https://github.com/badtuxx) e pela [linux TIPS](https://linuxtips.io)
 
 
+- [PICK - Programa Intensivo de Containers e Kubernetes](#pick---programa-intensivo-de-containers-e-kubernetes)
+  - [Descomplicando Containers](#descomplicando-containers)
+- [Certificados \& Badges](#certificados--badges)
+
+
+
 ---
 
 ## Descomplicando Containers
@@ -201,5 +207,47 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 </details>
 
 
+<details>
+<summary class="summary">DAY-06 - Orquetrando nossos Containers com Docker Compose e Docker Swarm</summary>
+
+- [Descomplicando Containers - DAY-06](DescomplicandoContainers/day-06/README.md#descomplicando-containers---day-06)
+- [Docker Swarm](DescomplicandoContainers/day-06/README.md#docker-swarm)
+  - [Criando o nosso *cluster*!](DescomplicandoContainers/day-06/README.md#criando-o-nosso-cluster)
+  - [O sensacional *services*!](DescomplicandoContainers/day-06/README.md#o-sensacional-services)
+- [Docker Secrets](DescomplicandoContainers/day-06/README.md#docker-secrets)
+  - [O comando *docker secret*](DescomplicandoContainers/day-06/README.md#o-comando-docker-secret)
+  - [Tudo bem, mas como uso isso?](DescomplicandoContainers/day-06/README.md#tudo-bem-mas-como-uso-isso)
+  - [Acessando a *secret*](DescomplicandoContainers/day-06/README.md#acessando-a-secret)
+  - [Atualizando a *secret* de um serviço](DescomplicandoContainers/day-06/README.md#atualizando-a-secret-de-um-serviço)
+- [Docker Compose](DescomplicandoContainers/day-06/README.md#docker-compose)
+  - [Arquivos do day-06](DescomplicandoContainers/day-06/README.md#arquivos-do-day-06)
+  - [Como executar os exemplos](DescomplicandoContainers/day-06/README.md#como-executar-os-exemplos)
+  - [Notas importantes](DescomplicandoContainers/day-06/README.md#notas-importantes)
+  - [Detalhamento dos arquivos docker-compose](DescomplicandoContainers/day-06/README.md#detalhamento-dos-arquivos-docker-compose)
+    - [docker-compose.v1.yaml](DescomplicandoContainers/day-06/README.md#docker-composev1yaml)
+    - [docker-compose.v2.yaml](DescomplicandoContainers/day-06/README.md#docker-composev2yaml)
+    - [docker-compose.v3.yaml](DescomplicandoContainers/day-06/README.md#docker-composev3yaml)
+    - [docker-compose.v4.yaml](DescomplicandoContainers/day-06/README.md#docker-composev4yaml)
+    - [docker-compose.v5.yaml](DescomplicandoContainers/day-06/README.md#docker-composev5yaml)
+    - [docker-compose.v6.yaml](DescomplicandoContainers/day-06/README.md#docker-composev6yaml)
+  - [O comando *docker stack*](DescomplicandoContainers/day-06/README.md#o-comando-docker-stack)
+  - [E já acabou? :(](DescomplicandoContainers/day-06/README.md#e-já-acabou-)
+
+</details>
 
 ---
+
+
+
+# Certificados & Badges
+
+|Badge|Certificado|
+|-----|-----------|
+| ![badge-docker](./DescomplicandoContainers/certificado/docker-badge.png) | [Certificado](./DescomplicandoContainers/certificado/uncomplication-docker.pdf) |
+| - | - |
+| - | - |
+| - | - |
+| - | - |
+| - | - |
+
+

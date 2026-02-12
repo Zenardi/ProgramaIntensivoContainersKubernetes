@@ -1,0 +1,90 @@
+services:
+  giropops-senhas:
+    build:
+      context: ../day-03/giropops-senhas
+      dockerfile: Dockerfile.v4
+    # container_name: giropops-senhas
+    # env_file:
+    #   - .env
+    ports:
+      - "5000:5000"
+    deploy:
+      labels:
+        - io.linuxtips.descomplicandocontainers.day-06=giropops-senhas
+        - io.linuxtips.descomplicandocontainers=giropops-senhas
+        - io.linuxtips.descomplicandocontainers.day-06.version=4.0
+      update_config:
+        parallelism: 1
+        delay: 5s
+      resources:
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+        limits:
+          cpus: '0.50'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - strigus:/strigus
+    networks:
+      - giropops
+    depends_on:
+      - redis
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    # devices:
+    #   - /dev/snd:/dev/snd
+
+    # A imagem 4.0 de giropops-senhas usa a imagem base da chainguard (distroless, cgr.dev/chainguard/python:latest), 
+    # que não tem o curl instalado, por isso o healthcheck está comentado. Teria que alterar a versao 1.0, 2.0 ou 3.0 
+    # para usar o curl no healthcheck.
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5000"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 2s
+
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--appendonly", "yes"]
+    deploy:
+      replicas: 3
+    # ports:
+    #   - "6379:6379"
+    networks:
+      - giropops
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 2s
+    labels:
+      - com.host.os=linux
+      - com.host.arch=amd64
+      - com.host.kernel=5.15.0-76-generic
+      - io.linuxtips.descomplicandocontainers.day-06=redis
+      - io.linuxtips.descomplicandocontainers=redis
+
+volumes:
+  strigus:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/strigus
+      o: bind
+    labels:
+      - io.linuxtips.descomplicandocontainers.day-06=strigus
+      - io.linuxtips.descomplicandocontainers=strigus
+
+networks:
+  giropops:
+    driver: bridge

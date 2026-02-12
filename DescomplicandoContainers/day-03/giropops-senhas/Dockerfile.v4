@@ -1,9 +1,14 @@
-FROM cgr.dev/chainguard/python:latest-dev as buildando
+FROM cgr.dev/chainguard/python:latest-dev AS build
 WORKDIR /app
 COPY requirements.txt .
 RUN pip3 install --user --no-cache-dir -r requirements.txt
+
+FROM cgr.dev/chainguard/python:latest AS runtime
+WORKDIR /app
+COPY --from=build /home/nonroot/.local /home/nonroot/.local
+ENV PATH="/home/nonroot/.local/bin:${PATH}"
 COPY app.py .
 COPY templates templates/
 COPY static static/
 
-ENTRYPOINT [ "flask", "run", "--host=0.0.0.0"]
+ENTRYPOINT [ "flask", "run", "--host=0.0.0.0" ]
