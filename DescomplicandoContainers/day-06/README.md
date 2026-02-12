@@ -84,7 +84,7 @@ Swarm initialized: current node (2qacv429fvnret8v09fqmjm16) is now a manager.
 
 To add a worker to this swarm, run the following command:
 
-   docker swarm join --token SWMTKN-1-100qtga34hfnf14xdbbhtv8ut6ugcvuhsx427jtzwaw1td2otj-18wccykydxte59gch2pix 172.31.58.90:2377
+   docker swarm join --token $DOCKER_SWARM_TOKEN 172.31.58.90:2377
 
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 
@@ -96,7 +96,7 @@ Com o comando anterior, iniciamos o nosso *cluster*!
 Repare no seguinte trecho da saída do último comando:
 
 ```bash
-# docker swarm join --token SWMTKN-1-100qtga34hfnf14xdbbhtv8ut6ugcvuhsx427jtzwaw1td2otj-18wccykydxte59gch2pix 172.31.58.90:2377
+# docker swarm join --token $DOCKER_SWARM_TOKEN 172.31.58.90:2377
 ```
 
 Essa linha nada mais é do que toda informação que você precisa para
@@ -112,7 +112,7 @@ exatamente a linha de comando recomendada na saída do "docker swarm
 init".
 
 ```bash
-root@linuxtips-03:~# docker swarm join --token SWMTKN-1-100qtga34hfnf14xdbbhtv8ut6ugcvuhsx427jtzwaw1td2otj-18wccykydxte59gch2pix 172.31.58.90:2377
+root@linuxtips-03:~# docker swarm join --token $DOCKER_SWARM_TOKEN 172.31.58.90:2377
 This node joined a swarm as a worker.
 
 root@linuxtips-03:~#
@@ -155,7 +155,7 @@ Para que possamos visualizar o comando e o *token* referente aos
 root@linuxtips-01:~# docker swarm join-token manager
 To add a manager to this swarm, run the following command:
 
-    docker swarm join --token SWMTKN-1-100qtga34hfnf14xdbbhtv8ut6ugcvuhsx427jtzwaw1td2otj-3i4jsv4i70odu1mes0ebe1l1e 172.31.58.90:2377 
+    docker swarm join --token $DOCKER_SWARM_TOKEN 172.31.58.90:2377 
 
 root@linuxtips-01:~#
 ```
@@ -166,7 +166,7 @@ Para visualizar o comando e o *token* referente aos *workers*:
 root@linuxtips-01:~# docker swarm join-token worker
 To add a worker to this swarm, run the following command:
 
-    docker swarm join --token SWMTKN-1-100qtga34hfnf14xdbbhtv8ut6ugcvuhsx427jtzwaw1td2otj-18wccykydxte59gch2pixq9av 172.31.58.90:2377 
+    docker swarm join --token $DOCKER_SWARM_TOKEN 172.31.58.90:2377 
 
 root@linuxtips-01:~#
 ```
@@ -177,7 +177,7 @@ Agora o que precisamos é executar na "LINUXtips-02" o comando para
 inclusão de mais um *node* como *manager*. Portanto, execute:
 
 ```bash
-root@linuxtips-02:~# docker swarm join --token SWMTKN-1-100qtga34hfnf14xdbbhtv8ut6ugcvuhsx427jtzwaw1td2otj-3i4jsv4i70odu1mes0ebe1l1e 172.31.58.90:2377
+root@linuxtips-02:~# docker swarm join --token $DOCKER_SWARM_TOKEN 172.31.58.90:2377
 
 This node joined a swarm as a manager.
 
