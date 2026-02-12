@@ -7,7 +7,7 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 ## Descomplicando Containers
 
 <details>
-<summary class="summary">DAY-01</summary>
+<summary class="summary">DAY-01 - Descomplicando o Docker</summary>
 
 - [Descomplicando Containers - DAY-01](DescomplicandoContainers/day-01/README.md#descomplicando-containers---day-01)
 - [O que é container?](DescomplicandoContainers/day-01/README.md#o-que-é-container)
@@ -58,7 +58,7 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 
 
 <details>
-<summary class="summary">DAY-02</summary>
+<summary class="summary">DAY-02 - Conhecendo o Dockerfile e os Volumes</summary>
 
 - [Descomplicando Containers - DAY-02](DescomplicandoContainers/day-02/README.md#descomplicando-containers---day-02)
 - [Meu primeiro e tosco dockerfile...](DescomplicandoContainers/day-02/README.md#meu-primeiro-e-tosco-dockerfile)
@@ -82,7 +82,7 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 
 
 <details>
-<summary class="summary">DAY-03</summary>
+<summary class="summary">DAY-03 - Limpando nossa imagem Docker e deixando-a segura</summary>
 
 - [Descomplicando Containers - DAY-03](DescomplicandoContainers/day-03/README.md#descomplicando-containers---day-03)
 - [Imagens Distroless](DescomplicandoContainers/day-03/README.md#imagens-distroless)
@@ -152,7 +152,7 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
 </details>
 
 <details>
-<summary class="summary">DAY-04</summary>
+<summary class="summary">DAY-04 - Os Diferentes Tipos de Volumes</summary>
 
 - [Descomplicando Containers - DAY-04](DescomplicandoContainers/day-04/README.md#descomplicando-containers---day-04)
 - [Introdução a volumes no Docker](DescomplicandoContainers/day-04/README.md#introdução-a-volumes-no-docker)
@@ -166,6 +166,40 @@ Conteudo do Programa Intensivo de Container e Kubernetes ministrado por [@badtux
     - [Qual driver estou usando?](DescomplicandoContainers/day-04/README.md#qual-driver-estou-usando)
 
 </details>
+
+<details>
+<summary class="summary">DAY-05 - Os Diferentes Tipos de Redes</summary>
+
+- [Descomplicando Containers - DAY-05](DescomplicandoContainers/day-05/README.md#descomplicando-containers---day-05)
+- [Gerenciando a rede dos *containers*](DescomplicandoContainers/day-05/README.md#gerenciando-a-rede-dos-containers)
+  - [Consigo fazer com que a porta do *container* responda na porta do *host*?](DescomplicandoContainers/day-05/README.md#consigo-fazer-com-que-a-porta-do-container-responda-na-porta-do-host)
+  - [E como ele faz isso? Mágica?](DescomplicandoContainers/day-05/README.md#e-como-ele-faz-isso-mágica)
+- [Tipos de rede no Docker](DescomplicandoContainers/day-05/README.md#tipos-de-rede-no-docker)
+  - [Exemplos praticos com Dockerfiles](DescomplicandoContainers/day-05/README.md#exemplos-praticos-com-dockerfiles)
+    - [bridge](DescomplicandoContainers/day-05/README.md#bridge)
+    - [host](DescomplicandoContainers/day-05/README.md#host)
+    - [none](DescomplicandoContainers/day-05/README.md#none)
+    - [overlay (requer Swarm)](DescomplicandoContainers/day-05/README.md#overlay-requer-swarm)
+    - [macvlan](DescomplicandoContainers/day-05/README.md#macvlan)
+    - [ipvlan](DescomplicandoContainers/day-05/README.md#ipvlan)
+- [Limitando CPU e Memória de Containers](DescomplicandoContainers/day-05/README.md#limitando-cpu-e-memória-de-containers)
+  - [Limitando Memória](DescomplicandoContainers/day-05/README.md#limitando-memória)
+  - [Limitando CPU](DescomplicandoContainers/day-05/README.md#limitando-cpu)
+- [Controlando o *daemon* do Docker](DescomplicandoContainers/day-05/README.md#controlando-o-daemon-do-docker)
+  - [O Docker sempre utiliza 172.16.X.X ou posso configurar outro intervalo de IP?](DescomplicandoContainers/day-05/README.md#o-docker-sempre-utiliza-17216xx-ou-posso-configurar-outro-intervalo-de-ip)
+  - [Opções de *sockets*](DescomplicandoContainers/day-05/README.md#opções-de-sockets)
+    - [*Unix Domain Socket*](DescomplicandoContainers/day-05/README.md#unix-domain-socket)
+    - [TCP](DescomplicandoContainers/day-05/README.md#tcp)
+  - [Opções de *storage*](DescomplicandoContainers/day-05/README.md#opções-de-storage)
+  - [Opções de rede](DescomplicandoContainers/day-05/README.md#opções-de-rede)
+  - [Opções diversas](DescomplicandoContainers/day-05/README.md#opções-diversas)
+- [Docker Machine](DescomplicandoContainers/day-05/README.md#docker-machine)
+  - [Ouvi dizer que minha vida ficaria melhor com o Docker Machine!](DescomplicandoContainers/day-05/README.md#ouvi-dizer-que-minha-vida-ficaria-melhor-com-o-docker-machine)
+    - [Vamos instalar?](DescomplicandoContainers/day-05/README.md#vamos-instalar)
+    - [Vamos iniciar nosso primeiro projeto?](DescomplicandoContainers/day-05/README.md#vamos-iniciar-nosso-primeiro-projeto)
+
+</details>
+
 
 
 ---
